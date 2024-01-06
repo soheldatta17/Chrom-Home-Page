@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio to Text</title>
+</head>
+<body>
+  <button onclick="startSpeechRecognition()">Start Recording</button>
+  <p id="output"></p>
+
+  <script>
+    function startSpeechRecognition() {
+      // Use standard SpeechRecognition if available, fallback to webkitSpeechRecognition
+      const recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!recognition) {
+        alert("Speech recognition not supported in this browser");
+        return;
+      }
+
+      const recognitionInstance = new recognition();
+
+      recognitionInstance.lang = 'en-US';
+      recognitionInstance.interimResults = true;
+      recognitionInstance.maxAlternatives = 1;
+
+      recognitionInstance.onresult = function(event) {
+        const result = event.results[0][0].transcript;
+        document.getElementById('output').innerHTML = result;
+      };
+
+      recognitionInstance.onend = function() {
+        console.log('Speech recognition ended.');
+      };
+
+      recognitionInstance.start();
+    }
+  </script>
+</body>
+</html>
