@@ -1,168 +1,64 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<link rel="stylesheet" href="style.css">
-<script src="style.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech to Text</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
 
-
+    button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-  
-<!-- partial:index.partial.html -->
-<div id="Z">
-  <div id="main-wrapper" class="fancy-scrollbar">
-    <div id="main">
-      <div id="content">
-        <div id="links-container"  style="padding-left: 30%; padding-right: 30%;">
-          <a href="https://gmail.com">Gmail</a>
-          <a href="https://unsplash.com">Unsplash</a>
-          <a href="http://www.devrahul.in">My site</a>
-          <a href="https://beacons.ai/developerrahul">About</a>
-        </div>
-      <div class="mycontainer" style="padding-left: 30%; padding-right: 30%; padding-top: 1%;">
-        <div id="header-container">
-          <div class='parent'>
-            <div class='child'><main>
-              <div class="atom">
-                  <div class="electron"></div>
-                  <div class="electron-alpha"></div>
-                  <div class="electron-omega"></div>
-              </div>
-          </main></div>
-            <div class='child'>  <button type="button" id="user-menu-button" style="margin-right: 10%; margin-top: 10%;">
-              <img src="dp.png" style="height: 100px; width: 100px; " alt="" />
-            </button>
-            <div class="social-buttons">
-  
-              <a href="https://www.instagram.com/developer_rahul_/" class="social-button social-button--instagram" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-              </a>
-              <a href="https://www.youtube.com/channel/UCzB2vC0kH-PPbrGmqeII9hQ" class="social-button social-button--youtube" aria-label="YouTube">
-                <i class="fab fa-youtube"></i>
-              </a>
-              <a href="#" class="social-button social-button--facebook" aria-label="Facebook">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-button social-button--linkedin" aria-label="LinkedIn">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-              <a href="#" class="social-button social-button--snapchat" aria-label="Snapchat">
-                <i class="fab fa-snapchat-ghost"></i>
-              </a>
-              <a href="https://github.com/Rahul-Kumar-Sahni" class="social-button social-button--github" aria-label="GitHub">
-                <i class="fab fa-github"></i>
-              </a>
-              <a href="https://codepen.io/rahul-sahni" class="social-button social-button--codepen" aria-label="CodePen">
-                <i class="fab fa-codepen"></i>
-              </a>
-            </div></div>
-          </div>
-          
-        
- 
-        </div>
+  <h1>Speech to Text Demo</h1>
+  <p id="output"></p>
+  <button onclick="requestMicrophonePermission()">Start Recording</button>
 
-        <a>
-          <h3 id ="sohel" class="txt-ne" style=" margin-left: 13%; margin-bottom: 7%; position: relative;" ><div id="editable-text"  style="font-family: Arial, Helvetica, sans-serif;"><b>HI SOHEL</b></div>
-          </h3>
-        </a>
+  <script>
+    function requestMicrophonePermission() {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function (stream) {
+          startSpeechRecognition();
+        })
+        .catch(function (error) {
+          console.error('Error accessing microphone:', error);
+          alert('Microphone access denied. Please enable microphone access in your browser settings.');
+        });
+    }
 
+    function startSpeechRecognition() {
+      const recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        <div id="search-container" style="margin-top: 5%;">
-          <div id="search-input-container">
-            <img src="https://assets.codepen.io/1468070/Google+G+Icon.png" alt="" />
-            <input type="text" placeholder="Search anything" id="search" />
-          </div>
+      if (!recognition) {
+        const reason = "SpeechRecognition API not supported in this browser";
+        console.error(reason);
+        alert(reason);
+        return;
+      }
 
-          <button id="image-button" onclick="googleSearch();" type="button">
-            <i class="fa-regular fa-search"></i>
-          </button>
-          <script src='https://codepen.io/Hyperplexed/pen/xxYJYjM/54407644e24173ad6019b766443bf2a6.js'></script>
+      const recognitionInstance = new recognition();
+      recognitionInstance.lang = 'en-US';
+      recognitionInstance.interimResults = true;
+      recognitionInstance.maxAlternatives = 1;
 
-          <button id="mic-button" type="button">
-            <i class="fa-regular fa-microphone"></i>
-          </button>
+      recognitionInstance.onresult = function(event) {
+        const result = event.results[0][0].transcript;
+        document.getElementById('output').innerHTML = result;
+      };
 
-     
-      
-          </div>
-          
-          
- 
+      recognitionInstance.onend = function() {
+        console.log('Speech recognition ended.');
+      };
 
-
-
-          <div id="apps-container">
-            
-            <a href="#" id="link">
-              <i class="fa-brands fa-stack-overflow"></i>
-              <div class="label">
-                <span class="name">Stack Overflow</span>
-                <span class="url" contenteditable="true">stackoverflow.com</span>
-              </div>
-            </a>
-
-            <a href="#" id="link2">
-              <i class="fa-brands fa-github"></i>
-              <div class="label">
-                <span class="name">Github</span>
-                <span class="url" contenteditable="true">github.com</span>
-              </div>
-            </a>
-
-            <a href="https://chat.openai.com">
-              <svg width="26" height="26" viewBox="0 0 41 41" fill="#10A37F" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" class="h-6 w-6"></svg>
-              <div class="label">
-                <span class="name">Chat GPT</span>
-                <span class="url" contenteditable="true">chat.openai.com</span>
-              </div>
-            </a>
-  
-            <a href="https://codepen.io">
-              <i class="fa-brands fa-codepen"></i>
-              <div class="label">
-                <span class="name">CodePen</span>
-                <span class="url">codepen.io</span>
-              </div>
-            </a>
-            <a href="https://youtube.com">
-              <i class="fa-brands fa-youtube"></i>
-              <div class="label">
-                <span class="name">YouTube</span>
-                <span class="url">youtube.com</span>
-              </div>
-            </a>
-            <a href="https://spotify.com">
-              <i class="fa-brands fa-spotify"></i>
-              <div class="label">
-                <span class="name">Spotify</span>
-                <span class="url">spotify.com</span>
-              </div>
-            </a>
-           
-            <a href="https://netflix.com">
-            
-              <img src="unnamed.png" style="height: 24px; width: 24px;">
-              <div class="label">
-                <span class="name">One Football</span>
-                <span class="url">onefootball.com</span>
-              </div>
-            </a>
-          
-
-            <a href="#">
-              <i class="fa-brands fa-xbox"></i>
-              <div class="label">
-                <span class="name">Xbox</span>
-                <span class="url">xbox.com</span>
-              </div>
-            </a>
-          </div>
-     
-
-      </div>
-  
-    </div>
-  </div>
-</div>
-  </div>
+      recognitionInstance.start();
+    }
+  </script>
 </body>
+</html>
